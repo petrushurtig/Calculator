@@ -14,15 +14,18 @@ export default function App() {
   }
   
   return (
+  
     <View style={styles.container}>
       <Text>Result: {result}</Text>
-      <TextInput style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={firstNum => setFirstNum(firstNum)} value={firstNum} />
-      <TextInput style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={secondNum => setSecondNum(secondNum)} value={secondNum} />
-      <View style={styles.buttons}>
+      <TextInput keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={firstNum => setFirstNum(firstNum)} value={firstNum} />
+      <TextInput keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={secondNum => setSecondNum(secondNum)} value={secondNum} />
+    <View style={{
+      flexDirection: 'row'
+    }}>
       <Button onPress={increment} title="+"></Button>
       <Button onPress={decrement} title="-"></Button>
       </View>
-    </View>
+      </View>
   );
 }
 
@@ -31,12 +34,7 @@ const styles = StyleSheet.create({
     flex:1,
     backgroundColor: '#fff',
     alignItems: 'center',
+    marginTop:200,
     justifyContent: 'center'
-  },
-  buttons: {
-    flexDirection: 'row',
-    flexDirection:'row', 
-    justifyContent: 'space-between', 
-    padding: 20
   }
 });
