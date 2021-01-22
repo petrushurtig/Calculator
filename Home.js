@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import React, {useState} from 'react';
+import React, {useState, useRef} from 'react';
 import { StyleSheet, Text, View, Button, TextInput, FlatList } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,33 +10,48 @@ export default function Calculator({navigation}) {
   const [result, setResult] = useState(0);
   const [firstNum, setFirstNum] = useState(0);
   const [secondNum, setSecondNum] = useState(0);
-  const [text, setText] = useState(firstNum + secondNum + result);
-  const [data, setData] = useState([])
-  const increment = () => {
-    setResult(parseInt(firstNum) + parseInt(secondNum));
-    history()
+  const [history, setHistory] = useState([]);
+
+  const initialFocus = useRef(null);
+
+  const calculate = operator => {
+      const[number1, number2] =[Number(firstNum), Number(secondNum)];
+      let result;
+      switch (operator) {
+          case '+':
+              result = number1 + number2;
+              break;
+        case '-':
+            result = number1 - number2;
+            break;
+      }
+      setResult(result);
+      setHistory([...history, { key: String(history.length), text: `${number1} ${operator} ${number2} = ${result}` }]);
+      setFirstNum('');
+      setSecondNum('');
+      initialFocus.current.focus();
   }
-  const decrement = () => {
-    setResult(parseInt(firstNum) - parseInt(secondNum));
-  }
-  const history = () => {
-    setData([...data, {key: text}]);
-  setText(firstNum + ' + ' + secondNum + ' = ' +result)
-  }
+
   return (
   
     <View style={styles.container}>
       <Text>Result: {result}</Text>
-      <TextInput keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={firstNum => setFirstNum(firstNum)} value={firstNum} />
-      <TextInput keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1}} onChangeText={secondNum => setSecondNum(secondNum)} value={secondNum} />
+      <TextInput ref={initialFocus} keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1, padding: 5, margin: 5}} onChangeText={val => setFirstNum(val)} value={firstNum} />
+      <TextInput keyboardType='numeric' style={{width:200, borderColor: 'black', borderWidth: 1, padding: 5,margin: 5}} onChangeText={val => setSecondNum(val)} value={secondNum} />
+      
     <View style={{
       flexDirection: 'row',
-      margin:40
-    }}>
-      <Button onPress={increment} title="+"></Button>
-      <Button  onPress={decrement} title="-"></Button>
+      width: '50%',
+      justifyContent: 'space-between'
+    }}><View style={{width:'20%'}}>
+      <Button onPress={() => calculate('+')} title="+"></Button>
       </View>
-      <Button title="History" onPress={() => navigation.navigate('History', {data: {data}, text: {text}})}></Button>
+      <View style={{width:'20%'}}>
+      <Button  onPress={() => calculate('-')} title="-"></Button>
+      </View>
+      <Button title="History" onPress={() => navigation.navigate('History', { history })}></Button>
+      </View>
+     
       </View>
        
   );

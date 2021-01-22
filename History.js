@@ -7,15 +7,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 export default function History({ route, navigation }) {
     
-   const {data} = route.params;
-    const {text} = route.params;
-    console.log(data);
+   const {history} = route.params;
+  
   return (
   
     <View style={styles.container}>
-      <FlatList data={data} renderItem={({ item }) => (
-        <Text>{item.key}</Text>
+        <View style={{height: '50%'}}>
+      <FlatList data={history} renderItem={({ item }) => (
+        <Text>{item.text}</Text>
       )} />  
+      </View>
       <Button title="Calculator" onPress={() => navigation.navigate('Home')}></Button>
       </View>
        
@@ -25,9 +26,8 @@ export default function History({ route, navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex:1,
-    backgroundColor: '#fff',
+    backgroundColor: "#ffff",
     alignItems: 'center',
-    marginTop:200,
     justifyContent: 'center'
   }
 });
